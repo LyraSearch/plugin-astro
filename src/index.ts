@@ -3,9 +3,9 @@ import type { AstroConfig, AstroIntegration, RouteData } from 'astro'
 import type {
 	InsertConfig,
 	Lyra,
-	PropertiesSchema,
 	SearchParams,
 } from '@lyrasearch/lyra'
+import { type PageIndexSchema, defaultSchema } from './clientside'
 import {
 	create as createLyraDB,
 	insert as insertIntoLyraDB,
@@ -14,15 +14,6 @@ import {
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { compile } from 'html-to-text'
 import { join as joinPath } from 'node:path'
-
-export const defaultSchema: PropertiesSchema = {
-	path: 'string',
-	title: 'string',
-	h1: 'string',
-	content: 'string',
-}
-
-export type PageIndexSchema = typeof defaultSchema
 
 export type LyraOptions = Partial<InsertConfig> & {
 	pathMatcher: RegExp
