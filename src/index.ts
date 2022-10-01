@@ -112,7 +112,7 @@ export const createPlugin = (
 				config = cfg
 			},
 			'astro:build:done': ({ pages, routes }) => {
-				const start = new Date().getTime()
+				const start = performance.now()
 
 				const assetsDir = joinPath(config.outDir.pathname, 'assets')
 				if (!existsSync(assetsDir)) {
@@ -129,7 +129,7 @@ export const createPlugin = (
 					)
 				}
 
-				const ellapsed = new Date().getTime() - start
+				const ellapsed = performance.now() - start
 				logger.success(`Lyra indices generated in ${ellapsed / 1000}s`)
 			},
 		},
