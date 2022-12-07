@@ -22,13 +22,25 @@
   "types": "./dist/esm/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/esm/index.mjs",
-      "require": "./dist/cjs/index.cjs",
+      "import": {
+        "types": "./dist/esm/index.d.ts",
+        "default": "./dist/esm/index.mjs"
+      },
+      "require": {
+        "types": "./dist/cjs/index.d.ts",
+        "default": "./dist/cjs/index.cjs"
+      },
       "node": "./dist/cjs/index.cjs"
     },
     "./clientside": {
-      "import": "./dist/esm/clientside.mjs",
-      "require": "./dist/cjs/clientside.cjs",
+      "import": {
+        "types": "./dist/esm/clientside.d.ts",
+        "default": "./dist/esm/clientside.mjs"
+      },
+      "require": {
+        "types": "./dist/cjs/clientside.d.ts",
+        "default": "./dist/cjs/clientside.cjs"
+      },
       "node": "./dist/cjs/clientside.cjs"
     }
   },
