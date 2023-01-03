@@ -66,18 +66,16 @@ const prepareLyraDb = (
 		.filter(({ pathname }) => dbConfig.pathMatcher.test(pathname))
 		.map(({ pathname }) => ({
 			pathname,
-			generatedFilePath: routes.filter(
-				(r) => {
-					const route = r.route.replace(/(^\/|\/$)/g, '')
-					const pathName = pathname.replace(/(^\/|\/$)/g, '')
+			generatedFilePath: routes.filter((r) => {
+				const route = r.route.replace(/(^\/|\/$)/g, '')
+				const pathName = pathname.replace(/(^\/|\/$)/g, '')
 
-					if (dbConfig.caseSensitive) {
-						return route.toLowerCase() === pathName.toLowerCase()
-					}
-
-					return route === pathName
+				if (dbConfig.caseSensitive) {
+					return route.toLowerCase() === pathName.toLowerCase()
 				}
-			)[0]?.distURL?.pathname,
+
+				return route === pathName
+			})[0]?.distURL?.pathname,
 		}))
 		.filter(({ generatedFilePath }) => !!generatedFilePath) as {
 		pathname: string

@@ -11,14 +11,14 @@ module.exports = {
 			`${currentDir}/tsconfig.tests.json`,
 		],
 	},
-	plugins: ['@typescript-eslint'],
+	plugins: ['@typescript-eslint', 'prettier'],
 	extends: [
 		'eslint:recommended',
 		'plugin:@typescript-eslint/eslint-recommended',
 		'plugin:@typescript-eslint/recommended',
 		'plugin:@typescript-eslint/recommended-requiring-type-checking',
 		'plugin:node/recommended-module',
-		'prettier',
+		"plugin:prettier/recommended",
 	],
 	rules: {
 		'node/no-missing-import': [
@@ -33,6 +33,7 @@ module.exports = {
 				tryExtensions: ['.cts', '.mts', '.ts', '.d.ts'],
 			},
 		],
+		'one-var': ['error', 'never'],
 		quotes: ['error', 'single', { avoidEscape: true }],
 		'sort-imports': 'error',
 	},
