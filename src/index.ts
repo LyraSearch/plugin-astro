@@ -13,6 +13,7 @@ import {
 } from '@lyrasearch/lyra'
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { compile } from 'html-to-text'
+import { fileURLToPath } from 'node:url'
 import { join as joinPath } from 'node:path'
 
 export const defaultSchema: PropertiesSchema = {
@@ -66,7 +67,7 @@ const prepareLyraDb = (
 		.filter(({ pathname }) => dbConfig.pathMatcher.test(pathname))
 		.map(({ pathname }) => ({
 			pathname,
-			generatedFilePath: routes.filter(
+			generatedFile: routes.filter(
 				(r) => {
 					const route = r.route.replace(/(^\/|\/$)/g, '')
 					const pathName = pathname.replace(/(^\/|\/$)/g, '')
@@ -77,11 +78,11 @@ const prepareLyraDb = (
 
 					return route === pathName
 				}
-			)[0]?.distURL?.pathname,
+			)[0]?.distURL,
 		}))
-		.filter(({ generatedFilePath }) => !!generatedFilePath) as {
+		.filter(({ generatedFile }) => !!generatedFile) as {
 		pathname: string
-		generatedFilePath: string
+		generatedFile: Exclude<RouteData['distURL'], undefined>
 	}[]
 
 	const lyraDB = createLyraDB({
@@ -89,8 +90,8 @@ const prepareLyraDb = (
 		...(dbConfig.language ? { defaultLanguage: dbConfig.language } : undefined),
 	})
 
-	for (const { pathname, generatedFilePath } of pathsToBeIndexed) {
-		const htmlContent = readFileSync(generatedFilePath, { encoding: 'utf8' })
+	for (const { pathname, generatedFile } of pathsToBeIndexed) {
+		const htmlContent = readFileSync(fileURLToPath(generatedFile), { encoding: 'utf8' })
 
 		const title = titleConverter(htmlContent) ?? ''
 		const h1 = h1Converter(htmlContent) ?? ''
@@ -122,7 +123,7 @@ export const createPlugin = (
 				config = cfg
 			},
 			'astro:build:done': ({ pages, routes }) => {
-				const assetsDir = joinPath(config.outDir.pathname, 'assets')
+				const assetsDir = joinPath(fileURLToPath(config.outDir), 'assets')
 				if (!existsSync(assetsDir)) {
 					mkdirSync(assetsDir)
 				}
