@@ -13,6 +13,7 @@ import {
 } from '@lyrasearch/lyra'
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { compile } from 'html-to-text'
+import { getLogger } from './logger'
 import { join as joinPath } from 'node:path'
 
 export const defaultSchema: PropertiesSchema = {
@@ -115,6 +116,9 @@ export const createPlugin = (
 	options: Record<string, LyraOptions>,
 ): AstroIntegration => {
 	let config: AstroConfig
+
+	const logger = getLogger(PKG_NAME)
+
 	return {
 		name: PKG_NAME,
 		hooks: {
@@ -122,6 +126,8 @@ export const createPlugin = (
 				config = cfg
 			},
 			'astro:build:done': ({ pages, routes }) => {
+				const start = performance.now()
+
 				const assetsDir = joinPath(config.outDir.pathname, 'assets')
 				if (!existsSync(assetsDir)) {
 					mkdirSync(assetsDir)
@@ -136,6 +142,9 @@ export const createPlugin = (
 						{ encoding: 'utf8' },
 					)
 				}
+
+				const ellapsed = performance.now() - start
+				logger.success(`Lyra indices generated in ${ellapsed / 1000}s`)
 			},
 		},
 	}
